@@ -5,7 +5,7 @@
  * @package		Category Field
  * @category	Fieldtypes
  * @author		Nuno Albuquerque
- * @license		http://creativecommons.org/licenses/by/3.0/
+ * @license			http://creativecommons.org/licenses/by-sa/3.0/
  * @link		http://www.nainteractive.com
  */
 
