@@ -5,15 +5,15 @@
  * @package		Category Field
  * @category	Fieldtypes
  * @author		Nuno Albuquerque
- * @license			http://creativecommons.org/licenses/by-sa/3.0/
- * @link		http://www.nainteractive.com
+ * @license		http://creativecommons.org/licenses/by/3.0/
+ * @link		http://nainteractive.com
  */
 
 class  Category_field_ft extends EE_Fieldtype {
 	
 	var $info = array(
 			'name'		=>	'Category Field',
-			'version'	=>	'1.0'
+			'version'	=>	'1.1'
 			);
 	
 
@@ -99,6 +99,9 @@ class  Category_field_ft extends EE_Fieldtype {
 	
 	function display_settings($data)
 	{
+		// Display as List, Tree, or Drop Down
+		// Optionally add "other", store in field 
+		
 		$this->settings = array_merge($this->settings, $data);
 		$this->EE->db->select('group_id, group_name');
 		$this->EE->db->from('exp_category_groups');
@@ -125,6 +128,14 @@ class  Category_field_ft extends EE_Fieldtype {
 		return array_merge($this->settings, $_POST);
 	}
 	
+	// ---------------------------------------------------------------- 
+	
+	function save($field_data = '')
+	{
+		// We don't need to store any information, our category data is stored by EE automatically
+		return 'none';
+	}
+	
 	
 	// --------------------------------------------------------------------
 
@@ -135,21 +146,27 @@ class  Category_field_ft extends EE_Fieldtype {
 		return array_merge($this->settings, $_POST);
 	}
 	
-	// Credit to Brandon Kelly for this method.
-	private function _theme_url()
+	
+	/**
+	 * Displays the field data in a template tag.
+	 *
+	 * @access	public
+	 * @param	array 		$params				The template tag parameters (key / value pairs).
+	 * @param	string		$tagdata			The content between the opening and closing tags, if it's a tag pair.
+	 * @param 	string		$field_data			The field data.
+	 * @param 	array 		$field_settings		The field settings.
+	 * @return	string
+	 */
+	function replace_tag($data, $params = array(), $tagdata = FALSE)
 	{
-		if (! isset($this->cache['theme_url']))
-		{
-			$theme_folder_url = $this->EE->config->item('theme_folder_url');
-			if (substr($theme_folder_url, -1) != '/') $theme_folder_url .= '/';
-			$this->cache['theme_url'] = $theme_folder_url.'third_party/ Category_field/';
-		}
-
-		return $this->cache['theme_url'];
+		// TODO
+		// return selected categories in this group for current entry
+		
+		return $this->settings['category_group_id'];
 	}
 	
 } 
 // END  Category_field_ft class
 
-/* End of file ft. Category_field.php */
-/* Location: ./system/expressionengine/third_party/ Category_field/ft. Category_field.php */
+/* End of file ft.Category_field.php */
+/* Location: ./system/expressionengine/third_party/Category_field/*/
