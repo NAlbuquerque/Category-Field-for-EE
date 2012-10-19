@@ -6,7 +6,7 @@ This field type allows you organize your category groups as you would any other 
 
 Release Notes
 --------
-1.0.1
+1.1
 2012-10-19 - (New) now renders group_id on templates
 
 1.0
