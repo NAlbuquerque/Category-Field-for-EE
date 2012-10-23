@@ -13,7 +13,7 @@ class  Category_field_ft extends EE_Fieldtype {
 
 	var $info = array(
 			'name'		=>	'Category Field',
-			'version'	=>	'1.1'
+			'version'	=>	'1.2'
 			);
 
 
