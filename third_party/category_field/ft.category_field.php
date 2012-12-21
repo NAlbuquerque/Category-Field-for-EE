@@ -13,7 +13,7 @@ class  Category_field_ft extends EE_Fieldtype {
 
 	public $info = array(
 			'name'		=>	'Category Field',
-			'version'	=>	'1.4'
+			'version'	=>	'1.4.1'
 			);
 			
 	public $ft_name = "category_field";
@@ -46,7 +46,10 @@ class  Category_field_ft extends EE_Fieldtype {
 		$group_id 		= $this->get_settings_prop('category_field_category_group_id');
 		$display_type 	= $this->get_settings_prop('category_field_display_type');
 		$show_filter	= $this->get_settings_prop('category_field_show_filter', 'y');
-
+		
+		// If no group id select, exit and return message
+		if($group_id == '') return lang('no_group_id');
+		
 		$this->EE->cp->add_to_head('
 			<script>
 				$(document).ready(function() {

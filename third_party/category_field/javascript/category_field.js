@@ -37,19 +37,17 @@
 			// Categories container element
 			$catgroup = $('#cat_group_container_' + plugin.settings.categoryGroupId);
 
+			// grab the edit link associated with this category group...
+			$edit_link = $("a.edit_categories_link").filter( function (){
+				return $(this).attr("href").match('group_id=' + plugin.settings.categoryGroupId);
+			});
+
 			// This fieldset will be empty in the categories tab after we move the $categroup in the DOM
 			var $empty_fieldset = $catgroup.parent("fieldset");
 
 			// Move the group to the $holder element
 			$catgroup.appendTo($holder);
 
-			// Remove the empty fieldset now
-			$empty_fieldset.remove();
-
-			// grab the edit link associated with this category group...
-			$edit_link = $("a.edit_categories_link").filter( function (){
-				return $(this).attr("href").match('group_id=' + plugin.settings.categoryGroupId);
-			});
 
 			// add an icon :D
 			$edit_link.text(plugin.settings.editLinkText).prepend('<img src="' + plugin.settings.themesFolder +'default/images/icon-edit.png" alt=""/>&nbsp;');
@@ -65,8 +63,9 @@
 			{
 				createChecboxList();
 			}
-
-
+			
+			// Remove the empty fieldset now
+			$empty_fieldset.remove();
 		}
 
 		var createSelectList = function ()
@@ -82,6 +81,7 @@
 
 			// place the edit link next to the list
 			//$edit_link.appendTo($catgroup);
+
 			$edit_link.appendTo($holder);
 
 			var	$label, $input, selected;
@@ -121,7 +121,6 @@
 		{
 			//place the edit link in our holder
 			$edit_link.appendTo($holder);
-
 			// Hide filter if we don't have enough items in the category group
 			if($catgroup.find('label').length < plugin.settings.minItemsToFilter)
 			{

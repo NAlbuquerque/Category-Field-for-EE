@@ -7,7 +7,8 @@ $lang = array(
 	'display_select'		=> 'Select List (Single Choice)',
 	'category_group'		=> 'Category Group',
 	'edit'					=> 'Edit Categories',
-	'filter_input_placeholder' => 'Filter list...'
+	'filter_input_placeholder' => 'Filter list...',
+	'no_group_id'			=> 'You must select a Category group in the field settings.'
 );
 
 /* End of file		: dropdate_lang.php */
