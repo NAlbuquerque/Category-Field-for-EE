@@ -13,19 +13,19 @@ class  Category_field_ft extends EE_Fieldtype {
 
 	public $info = array(
 			'name'		=>	'Category Field',
-			'version'	=>	'1.4.1'
+			'version'	=>	'1.4.2'
 			);
-			
+
 	public $ft_name = "category_field";
-	
+
 	public $default_settings = array(
-		'category_field_category_group_id' 	=> '', 
-		'category_field_display_type' 		=> '', 
+		'category_field_category_group_id' 	=> '',
+		'category_field_display_type' 		=> '',
 		'category_field_show_filter' 		=> ''
 	);
-	
+
 	public $settings = array();
-	
+
 
 	// --------------------------------------------------------------------
 
@@ -40,16 +40,16 @@ class  Category_field_ft extends EE_Fieldtype {
 	function display_field()
 	{
 		$this->_field_includes();
-		
+
 		$this->EE->lang->loadfile('category_field');
 
 		$group_id 		= $this->get_settings_prop('category_field_category_group_id');
 		$display_type 	= $this->get_settings_prop('category_field_display_type');
 		$show_filter	= $this->get_settings_prop('category_field_show_filter', 'y');
-		
+
 		// If no group id select, exit and return message
 		if($group_id == '') return lang('no_group_id');
-		
+
 		$this->EE->cp->add_to_head('
 			<script>
 				$(document).ready(function() {
@@ -58,14 +58,21 @@ class  Category_field_ft extends EE_Fieldtype {
 						categoryGroupId	: ' . $group_id .',
 						editText		: "' . lang('edit') .'",
 						themesFolder	: "' . URL_THIRD_THEMES . '../cp_themes/",
-						displayType		: ' . $display_type . ',
+						displayType		: ' . $display_type .',
+						fieldName		: "' . $this->field_name . '"
 					});
 				});
 			</script>');
 
-		$html = '<input type="text" value="" id="cat_filter_group_' . $group_id . '" class="filter_input" placeholder="'. lang('filter_input_placeholder'). '"/>';
+		$html = '';
 
-		return $show_filter ? $html : '';
+		if($show_filter){
+			$html = '<input type="text" value="1" id="cat_filter_group_' . $group_id . '" class="filter_input" placeholder="'. lang('filter_input_placeholder'). '"/>';
+		}
+
+		$html .= form_hidden($this->field_name, '', 'id="'.$this->field_name.'" style=""');
+
+		return $html;
 	}
 
 
@@ -122,17 +129,17 @@ class  Category_field_ft extends EE_Fieldtype {
 	function display_settings($data)
 	{
 		$this->EE->lang->loadfile('category_field');
-		
+
 		$settings = array_merge($this->default_settings, $data);
-		
+
 		$this->EE->db->select('group_id, group_name');
-		
+
 		$this->EE->db->from('exp_category_groups');
-		
+
 		$query = $this->EE->db->get();
 
 		$category_group[''] = "None";
-		
+
 		$category_group_list[''] = "None";
 
 		foreach($query->result_array() as $category_group)
@@ -181,8 +188,15 @@ class  Category_field_ft extends EE_Fieldtype {
 				$settings[$setting] = $value;
 			}
 		}
-		
+
 		return $settings;
+	}
+
+	// --------------------------------------------------------------------
+
+	function validate ($data)
+	{
+		return;
 	}
 
 

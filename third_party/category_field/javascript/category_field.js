@@ -5,6 +5,7 @@
 		var defaults = {
 			themesFolder		: '/themes/',
 			fieldId				: 0,			// Field ID,
+			fieldName			: '',			// Field Name
 			categoryGroupId		: 0,			// Category Group ID
 			editLinkText		: 'Edit', 		// Edit categories replacement text
 			minItemsToFilter	: 10,	 		// minimum items before displaying list
@@ -63,7 +64,8 @@
 			{
 				createChecboxList();
 			}
-			
+
+
 			// Remove the empty fieldset now
 			$empty_fieldset.remove();
 		}
@@ -109,6 +111,13 @@
 
 			// remove label/inputs, we've got a select list now
 			$catgroup.find('label').remove();
+
+			// Add a value to field for validation by checking value of select
+			$('form').bind('submit', function(e) {
+				var v = $selectList.val();
+				$('input[name="'+plugin.settings.fieldName+'"]').val(v);
+			});
+
 		}
 
 		var removeSelectList = function ()
@@ -150,6 +159,16 @@
 					$catgroup.find("label").not(":containsCI("+val+")").css("display","none");
 				}).val('');
 			}
+
+
+			// Add a value to field for validation by counting the total number of checked categories
+			$('form').bind('submit', function(e) {
+				var v = $catgroup.find(':checked').length;
+				// make 0 an empty string since the system treats 0 as a valid entry
+				if(v == 0)  v = '';
+				$('input[name="'+plugin.settings.fieldName+'"]').val(v);
+			});
+
 		}
 
 		var scrollToView = function ()
