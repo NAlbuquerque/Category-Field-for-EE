@@ -80,10 +80,8 @@
 			}
 
 			var $selectList = $catgroup.find('select.category_field_select');
-
+			$selectList.append('<option value="">Select</option><option disabled>--------------</option>');
 			// place the edit link next to the list
-			//$edit_link.appendTo($catgroup);
-
 			$edit_link.appendTo($holder);
 
 			var	$label, $input, selected;
