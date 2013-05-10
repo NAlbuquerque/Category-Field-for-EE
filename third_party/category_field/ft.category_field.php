@@ -13,7 +13,7 @@ class  Category_field_ft extends EE_Fieldtype {
 
 	public $info = array(
 			'name'		=>	'Category Field',
-			'version'	=>	'1.4.2'
+			'version'	=>	'1.4.3'
 			);
 
 	public $ft_name = "category_field";
@@ -50,7 +50,7 @@ class  Category_field_ft extends EE_Fieldtype {
 		// If no group id select, exit and return message
 		if($group_id == '') return lang('no_group_id');
 
-		$this->EE->cp->add_to_head('
+		$this->EE->cp->add_to_foot('
 			<script>
 				$(document).ready(function() {
 					$("#sub_hold_field_' . $this->field_id . '").categoryField({
@@ -104,9 +104,9 @@ class  Category_field_ft extends EE_Fieldtype {
 						margin-right: 8px;
 					}
 				</style>
+				');
 
-
-				<script>
+			$this->EE->cp->add_to_foot('<script>
 				jQuery.extend (
 					// contains case insensitive
 				    jQuery.expr[":"].containsCI = function (a, i, m) {
@@ -115,9 +115,7 @@ class  Category_field_ft extends EE_Fieldtype {
 				        return zRegExp.test (sText);
 				    }
 				);
-
-				</script>
-				');
+				</script>');
 
 			$this->cache[$this->ft_name]['included_configs'] = array();
 		}
