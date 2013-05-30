@@ -133,6 +133,8 @@ class  Category_field_ft extends EE_Fieldtype {
 		$this->EE->db->select('group_id, group_name');
 
 		$this->EE->db->from('exp_category_groups');
+		
+		$this->EE->db->where('site_id',$this->EE->config->item('site_id'));
 
 		$query = $this->EE->db->get();
 
