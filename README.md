@@ -6,6 +6,9 @@ This field type allows you organize your category groups as you would any other 
 
 Release Notes
 --------
+1.4.4 (2013-06-06)
+- Improved	- Better keyboard support for drop down select lists.
+
 1.4.3 (2013-05-10)
 - Update	- Moved JS to footer to follow EE 2.6 guidelines.
 

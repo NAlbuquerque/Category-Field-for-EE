@@ -80,17 +80,21 @@
 			}
 
 			var $selectList = $catgroup.find('select.category_field_select');
+			
 			$selectList.append('<option value="">Select</option><option disabled>--------------</option>');
+			
 			// place the edit link next to the list
 			$edit_link.appendTo($holder);
 
-			var	$label, $input, selected;
+			var	$label, $input, selected, label_text;
 
 			$catgroup.find('label').each(function (){
 				$label= $(this);
 				$input = $label.find('input');
 				selected = ($input.attr('checked') == 'checked') ?  'selected="selected"'  : '';
-				$selectList.append('<option value="' + $input.val() + '" ' + selected +'>' + $label.text() + '</option>');
+				// Strip beginning line breaks and spaces to allow for keyboard input -- does not work with indented items
+				label_text = $label.text().replace(/(\r\n|\n|\r|\t)/gm, '').replace(/(^\s{2})/,'');
+				$selectList.append('<option value="' + $input.val() + '" ' + selected +'>' + label_text + '</option>');
 			});
 
 
