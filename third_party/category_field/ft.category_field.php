@@ -37,7 +37,7 @@ class  Category_field_ft extends EE_Fieldtype {
 
 	// --------------------------------------------------------------------
 
-	function display_field()
+	function display_field($data)
 	{
 		$this->_field_includes();
 
