@@ -1,8 +1,8 @@
 <?php
 $lang = array(
-	'show_filter'			=> 'Show Filter',
-	'show_other'			=> 'Show Other Input Field',
-	'display_type'			=> 'Display Type',
+	'show_filter'			=> 'Show filter',
+	'hide_edit'				=> 'Hide edit link',
+	'display_type'			=> 'Display type',
 	'display_checkbox'		=> 'Checkbox',
 	'display_select'		=> 'Select List (Single Choice)',
 	'category_group'		=> 'Category Group',

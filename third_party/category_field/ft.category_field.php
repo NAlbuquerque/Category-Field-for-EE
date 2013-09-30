@@ -13,15 +13,16 @@ class  Category_field_ft extends EE_Fieldtype {
 
 	public $info = array(
 			'name'		=>	'Category Field',
-			'version'	=>	'1.4.5'
+			'version'	=>	'1.5'
 			);
 
 	public $ft_name = "category_field";
-
+		
 	public $default_settings = array(
 		'category_field_category_group_id' 	=> '',
 		'category_field_display_type' 		=> '',
-		'category_field_show_filter' 		=> ''
+		'category_field_show_filter' 		=> '',
+		'category_field_hide_edit' 			=> ''
 	);
 
 	public $settings = array();
@@ -39,6 +40,7 @@ class  Category_field_ft extends EE_Fieldtype {
 
 	function display_field($data)
 	{
+
 		$this->_field_includes();
 
 		$this->EE->lang->loadfile('category_field');
@@ -46,6 +48,7 @@ class  Category_field_ft extends EE_Fieldtype {
 		$group_id 		= $this->get_settings_prop('category_field_category_group_id');
 		$display_type 	= $this->get_settings_prop('category_field_display_type');
 		$show_filter	= $this->get_settings_prop('category_field_show_filter', 'y');
+		$hide_edit		= $this->get_settings_prop('category_field_hide_edit', 'n');
 
 		// If no group id select, exit and return message
 		if($group_id == '') return lang('no_group_id');
@@ -59,6 +62,8 @@ class  Category_field_ft extends EE_Fieldtype {
 						editText		: "' . lang('edit') .'",
 						themesFolder	: "' . URL_THIRD_THEMES . '../cp_themes/",
 						displayType		: ' . $display_type .',
+						hideEdit		: "' . $hide_edit .'",
+						showFilter		: "' . $show_filter .'",
 						fieldName		: "' . $this->field_name . '"
 					});
 				});
@@ -126,17 +131,19 @@ class  Category_field_ft extends EE_Fieldtype {
 
 	function display_settings($data)
 	{
+
 		$this->EE->lang->loadfile('category_field');
 
 		$settings = array_merge($this->default_settings, $data);
 
-		$this->EE->db->select('group_id, group_name');
-
-		$this->EE->db->from('exp_category_groups');
+		$channel_id = $data['group_id'];
 		
-		$this->EE->db->where('site_id',$this->EE->config->item('site_id'));
-
-		$query = $this->EE->db->get();
+		$site_id = $data['site_id'];
+	
+		$query = $this->EE->db->query ("select group_id, group_name
+									from exp_category_groups
+									where FIND_IN_SET(group_id, (SELECT  REPLACE ((select cat_group from exp_channels where channel_id = $channel_id), '|', ',')) )
+									and site_id = $site_id");
 
 		$category_group[''] = "None";
 
@@ -153,15 +160,19 @@ class  Category_field_ft extends EE_Fieldtype {
 		);
 
 		$this->EE->table->add_row(
-			lang('category_group'), form_dropdown('category_field_category_group_id',$category_group_list,  $settings['category_field_category_group_id'])
+			lang('category_group'), form_dropdown('category_field_category_group_id', $category_group_list,  $settings['category_field_category_group_id'])
 		);
 
 		$this->EE->table->add_row(
-			lang('display_type'), form_dropdown('category_field_display_type',$category_field_display_type, $settings['category_field_display_type'])
+			lang('display_type'), form_dropdown('category_field_display_type', $category_field_display_type, $settings['category_field_display_type'])
 		);
 
 		$this->EE->table->add_row(
 			lang('show_filter'), form_checkbox('category_field_show_filter','y', $settings['category_field_show_filter'])
+		);
+		
+		$this->EE->table->add_row(
+			lang('hide_edit'), form_checkbox('category_field_hide_edit','y', $settings['category_field_hide_edit'])
 		);
 	}
 
@@ -211,6 +222,13 @@ class  Category_field_ft extends EE_Fieldtype {
 	 * @return	string
 	 */
 	function replace_tag($data, $params = array(), $tagdata = FALSE)
+	{
+		return $this->settings['category_field_category_group_id'];
+	}
+	
+	// ----
+	
+	function pre_process($data)
 	{
 		return $this->settings['category_field_category_group_id'];
 	}

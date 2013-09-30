@@ -9,6 +9,7 @@
 			categoryGroupId		: 0,			// Category Group ID
 			editLinkText		: 'Edit', 		// Edit categories replacement text
 			minItemsToFilter	: 10,	 		// minimum items before displaying list
+			hideEdit			: '',	 		// minimum items before displaying list
 			displayType			: 0				// 0 = checkbox, 1 = dropdown (single choice)
 		}
 
@@ -42,16 +43,25 @@
 			$edit_link = $("a.edit_categories_link").filter( function (){
 				return $(this).attr("href").match('group_id=' + plugin.settings.categoryGroupId);
 			});
+			
+			if(plugin.settings.hideEdit != 'y')
+			{
 
+				
+				// add an icon :D
+				$edit_link.text(plugin.settings.editLinkText).prepend('<img src="' + plugin.settings.themesFolder +'default/images/icon-edit.png" alt=""/>&nbsp;');
+				
+				$edit_link.appendTo($holder);
+			}else {
+				$edit_link.remove();
+			}
+			
 			// This fieldset will be empty in the categories tab after we move the $categroup in the DOM
 			var $empty_fieldset = $catgroup.parent("fieldset");
 
 			// Move the group to the $holder element
-			$catgroup.appendTo($holder);
+			$catgroup.prependTo($holder);
 
-
-			// add an icon :D
-			$edit_link.text(plugin.settings.editLinkText).prepend('<img src="' + plugin.settings.themesFolder +'default/images/icon-edit.png" alt=""/>&nbsp;');
 
 			// Grab the input text field added by Category Field fieldtype to use as a filtering control
 			$filter_input = $('#cat_filter_group_' + plugin.settings.categoryGroupId);
@@ -82,9 +92,6 @@
 			var $selectList = $catgroup.find('select.category_field_select');
 			
 			$selectList.append('<option value="">Select</option><option disabled>--------------</option>');
-			
-			// place the edit link next to the list
-			$edit_link.appendTo($holder);
 
 			var	$label, $input, selected, label_text;
 
@@ -130,8 +137,6 @@
 
 		var createChecboxList = function ()
 		{
-			//place the edit link in our holder
-			$edit_link.appendTo($holder);
 			// Hide filter if we don't have enough items in the category group
 			if($catgroup.find('label').length < plugin.settings.minItemsToFilter)
 			{

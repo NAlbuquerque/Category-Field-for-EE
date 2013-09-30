@@ -6,6 +6,10 @@ This field type allows you organize your category groups as you would any other 
 
 Release Notes
 --------
+1.5	(2013-09-30)
+- New		- Added "Hide edit link" option in field settings screen.
+- Improved  - Category group drop down only shows groups which have been assigned to the field's parent channel.
+
 1.4.5 (2013-06-11)
 - Bug Fix - Compatability with EE 2.7
 
