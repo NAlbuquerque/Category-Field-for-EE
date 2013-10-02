@@ -13,7 +13,7 @@ class  Category_field_ft extends EE_Fieldtype {
 
 	public $info = array(
 			'name'		=>	'Category Field',
-			'version'	=>	'1.5'
+			'version'	=>	'1.5.1'
 			);
 
 	public $ft_name = "category_field";
@@ -138,12 +138,11 @@ class  Category_field_ft extends EE_Fieldtype {
 
 		$channel_id = $data['group_id'];
 		
-		$site_id = $data['site_id'];
+		$site_id = $data['site_id'] || 1;
 	
 		$query = $this->EE->db->query ("select group_id, group_name
 									from exp_category_groups
-									where FIND_IN_SET(group_id, (SELECT  REPLACE ((select cat_group from exp_channels where channel_id = $channel_id), '|', ',')) )
-									and site_id = $site_id");
+									where FIND_IN_SET(group_id, (SELECT  REPLACE ((select cat_group from exp_channels where channel_id = $channel_id), '|', ',')) ) and site_id = $site_id");
 
 		$category_group[''] = "None";
 
