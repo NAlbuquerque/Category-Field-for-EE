@@ -6,6 +6,11 @@ This field type allows you organize your category groups as you would any other 
 
 Release Notes
 --------
+1.5.2 (2013-10-10)
+- Bug fix	- Fixed database issues under certain versions of MySQL
+- Bug fix	- Moved filter back to top of list
+
+
 1.5.1	(2013-10-2)
 - Bug Fix	- Database error when creating new a new fieldtype
 

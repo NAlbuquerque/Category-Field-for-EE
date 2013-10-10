@@ -9,7 +9,7 @@
 			categoryGroupId		: 0,			// Category Group ID
 			editLinkText		: 'Edit', 		// Edit categories replacement text
 			minItemsToFilter	: 10,	 		// minimum items before displaying list
-			hideEdit			: '',	 		// minimum items before displaying list
+			hideEdit			: '',	 		// overrides hiding of the edit link
 			displayType			: 0				// 0 = checkbox, 1 = dropdown (single choice)
 		}
 
@@ -46,8 +46,6 @@
 			
 			if(plugin.settings.hideEdit != 'y')
 			{
-
-				
 				// add an icon :D
 				$edit_link.text(plugin.settings.editLinkText).prepend('<img src="' + plugin.settings.themesFolder +'default/images/icon-edit.png" alt=""/>&nbsp;');
 				
@@ -74,8 +72,10 @@
 			{
 				createChecboxList();
 			}
-
-
+			
+			// Move the filter to the top 
+			$holder.find('.filter_input').prependTo($holder);
+			
 			// Remove the empty fieldset now
 			$empty_fieldset.remove();
 		}

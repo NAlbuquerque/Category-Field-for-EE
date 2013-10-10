@@ -11,9 +11,10 @@
 
 class  Category_field_ft extends EE_Fieldtype {
 
+	
 	public $info = array(
 			'name'		=>	'Category Field',
-			'version'	=>	'1.5.1'
+			'version'	=>	'1.5.2'
 			);
 
 	public $ft_name = "category_field";
@@ -21,8 +22,8 @@ class  Category_field_ft extends EE_Fieldtype {
 	public $default_settings = array(
 		'category_field_category_group_id' 	=> '',
 		'category_field_display_type' 		=> '',
-		'category_field_show_filter' 		=> '',
-		'category_field_hide_edit' 			=> ''
+		'category_field_hide_filter' 		=> 'n',
+		'category_field_hide_edit' 			=> 'n'
 	);
 
 	public $settings = array();
@@ -47,7 +48,7 @@ class  Category_field_ft extends EE_Fieldtype {
 
 		$group_id 		= $this->get_settings_prop('category_field_category_group_id');
 		$display_type 	= $this->get_settings_prop('category_field_display_type');
-		$show_filter	= $this->get_settings_prop('category_field_show_filter', 'y');
+		$hide_filter	= $this->get_settings_prop('category_field_hide_filter', 'n');
 		$hide_edit		= $this->get_settings_prop('category_field_hide_edit', 'n');
 
 		// If no group id select, exit and return message
@@ -63,19 +64,16 @@ class  Category_field_ft extends EE_Fieldtype {
 						themesFolder	: "' . URL_THIRD_THEMES . '../cp_themes/",
 						displayType		: ' . $display_type .',
 						hideEdit		: "' . $hide_edit .'",
-						showFilter		: "' . $show_filter .'",
 						fieldName		: "' . $this->field_name . '"
 					});
 				});
 			</script>');
 
-		$html = '';
+		$html = form_hidden($this->field_name, '', 'id="'.$this->field_name.'" style=""');
 
-		if($show_filter){
-			$html = '<input type="text" value="1" id="cat_filter_group_' . $group_id . '" class="filter_input" placeholder="'. lang('filter_input_placeholder'). '"/>';
+		if($hide_filter != 'y'){
+			$html .= '<input type="text" value="1" id="cat_filter_group_' . $group_id . '" class="filter_input" placeholder="'. lang('filter_input_placeholder'). '"/>';
 		}
-
-		$html .= form_hidden($this->field_name, '', 'id="'.$this->field_name.'" style=""');
 
 		return $html;
 	}
@@ -97,14 +95,22 @@ class  Category_field_ft extends EE_Fieldtype {
 						padding: 10px;
 						border: 1px solid #D0D7DF;
 						overflow:auto;
+						max-height:350px;
 					}
 
 					.publish_category_field .filter_input {
-						width: 180px;
+						width: 220px;
 						background: #fffef2;
 						margin-top: 4px;
 					}
-
+					
+					.publish_category_field .cat_group_container label:hover {
+						color: #000;
+					}
+					.publish_category_field .cat_group_container label:nth-child(2n){
+						backgorund-color: #f3f6f7; /*ie*/
+						background-color: rgba(255,255,255,.4);
+					}
 					.category_field_select {
 						margin-right: 8px;
 					}
@@ -137,12 +143,10 @@ class  Category_field_ft extends EE_Fieldtype {
 		$settings = array_merge($this->default_settings, $data);
 
 		$channel_id = $data['group_id'];
-		
-		$site_id = $data['site_id'] || 1;
 	
 		$query = $this->EE->db->query ("select group_id, group_name
 									from exp_category_groups
-									where FIND_IN_SET(group_id, (SELECT  REPLACE ((select cat_group from exp_channels where channel_id = $channel_id), '|', ',')) ) and site_id = $site_id");
+									where FIND_IN_SET(group_id, (SELECT  REPLACE ((select cat_group from exp_channels where channel_id = $channel_id), '|', ',')) )");
 
 		$category_group[''] = "None";
 
@@ -152,27 +156,37 @@ class  Category_field_ft extends EE_Fieldtype {
 		{
 			$category_group_list[$category_group['group_id']] = $category_group['group_name'];
 		}
-
+		
+		
 		$category_field_display_type = array(
 			0 => lang('display_checkbox'),
 			1 => lang('display_select')
 		);
-
+		
+		
+		// Yes/No Options for Select Controls
+		$select_options = array('y' => 'Yes', 'n' => 'No');
+		
 		$this->EE->table->add_row(
-			lang('category_group'), form_dropdown('category_field_category_group_id', $category_group_list,  $settings['category_field_category_group_id'])
+			'<strong>' . lang('category_group') .'</strong><br>' . lang('category_group_desc'),
+			form_dropdown('category_field_category_group_id', $category_group_list,  $settings['category_field_category_group_id'])
 		);
 
 		$this->EE->table->add_row(
-			lang('display_type'), form_dropdown('category_field_display_type', $category_field_display_type, $settings['category_field_display_type'])
+			'<strong>' .lang('display_type').'</strong>',
+			form_dropdown('category_field_display_type', $category_field_display_type, $settings['category_field_display_type'])
 		);
 
 		$this->EE->table->add_row(
-			lang('show_filter'), form_checkbox('category_field_show_filter','y', $settings['category_field_show_filter'])
+			'<strong>' . lang('hide_filter') .'</strong><br>' . lang('hide_filter_desc'),
+			 form_dropdown('category_field_hide_filter', $select_options, $settings['category_field_hide_filter']) 
 		);
 		
 		$this->EE->table->add_row(
-			lang('hide_edit'), form_checkbox('category_field_hide_edit','y', $settings['category_field_hide_edit'])
+			'<strong>' . lang('hide_edit') .'</strong><br>' . lang('hide_edit_desc'), 
+			form_dropdown('category_field_hide_edit', $select_options, $settings['category_field_hide_edit'])
 		);
+		
 	}
 
 
