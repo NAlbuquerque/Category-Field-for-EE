@@ -108,7 +108,7 @@ class  Category_field_ft extends EE_Fieldtype {
 						color: #000;
 					}
 					.publish_category_field .cat_group_container label:nth-child(2n){
-						backgorund-color: #f3f6f7; /*ie*/
+						background-color: #f3f6f7; /*ie*/
 						background-color: rgba(255,255,255,.4);
 					}
 					.category_field_select {
