@@ -14,7 +14,7 @@ class  Category_field_ft extends EE_Fieldtype {
 	
 	public $info = array(
 			'name'		=>	'Category Field',
-			'version'	=>	'1.5.2'
+			'version'	=>	'1.5.3'
 			);
 
 	public $ft_name = "category_field";
@@ -143,10 +143,21 @@ class  Category_field_ft extends EE_Fieldtype {
 		$settings = array_merge($this->default_settings, $data);
 
 		$channel_id = $data['group_id'];
-	
+		
+		// Get Category ID's assigned to this field's group
+		$query = $this->EE->db->query("select cat_group from exp_channels where channel_id = $channel_id");
+		$cat_group_ids =  str_replace('|',',',$query->row()->cat_group);
+		
+		
+		// Get Cagegory group data
+		$query = $this->EE->db->query("select group_id, group_name from exp_category_groups
+										where group_id IN($cat_group_ids)");
+
+/*
 		$query = $this->EE->db->query ("select group_id, group_name
 									from exp_category_groups
 									where FIND_IN_SET(group_id, (SELECT  REPLACE ((select cat_group from exp_channels where channel_id = $channel_id), '|', ',')) )");
+*/
 
 		$category_group[''] = "None";
 

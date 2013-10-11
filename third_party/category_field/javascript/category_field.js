@@ -40,8 +40,8 @@
 			$catgroup = $('#cat_group_container_' + plugin.settings.categoryGroupId);
 
 			// grab the edit link associated with this category group...
-			$edit_link = $("a.edit_categories_link").filter( function (){
-				return $(this).attr("href").match('group_id=' + plugin.settings.categoryGroupId);
+			$edit_link = $("#categories a.edit_categories_link").filter( function (){
+				return $(this).attr("href").match('(group_id=' + plugin.settings.categoryGroupId +')$');
 			});
 			
 			if(plugin.settings.hideEdit != 'y')
