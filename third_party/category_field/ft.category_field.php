@@ -11,14 +11,14 @@
 
 class  Category_field_ft extends EE_Fieldtype {
 
-	
+
 	public $info = array(
 			'name'		=>	'Category Field',
-			'version'	=>	'1.5.3'
+			'version'	=>	'1.5.3.1'
 			);
 
 	public $ft_name = "category_field";
-		
+
 	public $default_settings = array(
 		'category_field_category_group_id' 	=> '',
 		'category_field_display_type' 		=> '',
@@ -103,7 +103,7 @@ class  Category_field_ft extends EE_Fieldtype {
 						background: #fffef2;
 						margin-top: 4px;
 					}
-					
+
 					.publish_category_field .cat_group_container label:hover {
 						color: #000;
 					}
@@ -142,45 +142,37 @@ class  Category_field_ft extends EE_Fieldtype {
 
 		$settings = array_merge($this->default_settings, $data);
 
-		$channel_id = $data['group_id'];
-		
-		// Get Category ID's assigned to this field's group
-		$query = $this->EE->db->query("select cat_group from exp_channels where channel_id = $channel_id");
-		$cat_group_ids =  str_replace('|',',',$query->row()->cat_group);
-		
-		
-		// Get Cagegory group data
-		$query = $this->EE->db->query("select group_id, group_name from exp_category_groups
-										where group_id IN($cat_group_ids)");
 
-/*
-		$query = $this->EE->db->query ("select group_id, group_name
-									from exp_category_groups
-									where FIND_IN_SET(group_id, (SELECT  REPLACE ((select cat_group from exp_channels where channel_id = $channel_id), '|', ',')) )");
-*/
+		$field_cat_groups = $this->get_field_cat_groups($data['group_id']);
 
 		$category_group[''] = "None";
 
 		$category_group_list[''] = "None";
 
-		foreach($query->result_array() as $category_group)
+		if(sizeof($field_cat_groups) > 0)
 		{
-			$category_group_list[$category_group['group_id']] = $category_group['group_name'];
+			foreach($field_cat_groups as $category_group)
+			{
+				$category_group_list[$category_group['group_id']] = $category_group['group_name'];
+			}
+
 		}
-		
-		
+
 		$category_field_display_type = array(
 			0 => lang('display_checkbox'),
 			1 => lang('display_select')
 		);
-		
-		
+
+
+		// Replace drop down with a notice if field's channel(s) are not properly set up
+		$cat_group_html = (sizeof($field_cat_groups) > 0) ? form_dropdown('category_field_category_group_id', $category_group_list,  $settings['category_field_category_group_id']) : '<p class="notice">'.lang('no_cat_groups_assigned').'</p>';
+
+
 		// Yes/No Options for Select Controls
 		$select_options = array('y' => 'Yes', 'n' => 'No');
-		
+
 		$this->EE->table->add_row(
-			'<strong>' . lang('category_group') .'</strong><br>' . lang('category_group_desc'),
-			form_dropdown('category_field_category_group_id', $category_group_list,  $settings['category_field_category_group_id'])
+			'<strong>' . lang('category_group') .'</strong><br>' . lang('category_group_desc'), $cat_group_html
 		);
 
 		$this->EE->table->add_row(
@@ -190,14 +182,59 @@ class  Category_field_ft extends EE_Fieldtype {
 
 		$this->EE->table->add_row(
 			'<strong>' . lang('hide_filter') .'</strong><br>' . lang('hide_filter_desc'),
-			 form_dropdown('category_field_hide_filter', $select_options, $settings['category_field_hide_filter']) 
+			 form_dropdown('category_field_hide_filter', $select_options, $settings['category_field_hide_filter'])
 		);
-		
+
 		$this->EE->table->add_row(
-			'<strong>' . lang('hide_edit') .'</strong><br>' . lang('hide_edit_desc'), 
+			'<strong>' . lang('hide_edit') .'</strong><br>' . lang('hide_edit_desc'),
 			form_dropdown('category_field_hide_edit', $select_options, $settings['category_field_hide_edit'])
 		);
-		
+
+	}
+
+	// ----------------------------------------------------------------
+
+	private function get_field_cat_groups($field_id)
+	{
+
+		// bail now, field id is missing!
+		if(!$field_id) return $rtn;
+
+		// Get all channel_ids in case this fieldgroup is assigned to more than 1 channel
+
+		$query = $this->EE->db->query("select channel_id from exp_channels where field_group = $field_id");
+		if($query->num_rows() == 0) return array();
+
+		// Convert results to comma delimited list so we can reuse in next query
+		$ids=array();
+
+		foreach($query->result_array() as $row)
+		{
+		    $ids[] = $row['channel_id'];
+		}
+
+		$channel_ids =  implode (',' , $ids );
+
+		// Get Category Group IDs assigned to this field's parent channels
+		$query = $this->EE->db->query("select cat_group from exp_channels where channel_id IN ($channel_ids)");
+		if($query->num_rows() == 0) return array();
+
+		// Convert results to comma delimited list so we can reuse in next query
+		$ids=array();
+
+		foreach($query->result_array() as $row)
+		{
+		    $ids[] = str_replace('|',',', $row['cat_group']);
+		}
+
+		$cat_group_ids =  implode (',' , $ids );
+
+		// Finally get the category groups' data!
+		$query = $this->EE->db->query("select group_id, group_name from exp_category_groups	where group_id IN($cat_group_ids)");
+		if($query->num_rows() == 0) return array();
+
+
+		return $query->result_array();
 	}
 
 
@@ -249,9 +286,9 @@ class  Category_field_ft extends EE_Fieldtype {
 	{
 		return $this->settings['category_field_category_group_id'];
 	}
-	
+
 	// ----
-	
+
 	function pre_process($data)
 	{
 		return $this->settings['category_field_category_group_id'];

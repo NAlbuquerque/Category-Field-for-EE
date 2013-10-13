@@ -11,6 +11,7 @@ $lang = array(
 	'category_group_desc'	=> 'Only categories assigned to this field&rsquo;s Channel are displayed.',
 	'edit'					=> 'Edit Categories',
 	'filter_input_placeholder' => 'Filter list...',
+	'no_cat_groups_assigned'	=> 'You must assign at least one Category Group to parent Channel before using this field type.',
 	'no_group_id'			=> 'You must select a Category group in the field settings.'
 );
 

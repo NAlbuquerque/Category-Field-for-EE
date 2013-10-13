@@ -6,7 +6,9 @@ This field type allows you organize your category groups as you would any other 
 
 Release Notes
 --------
-1.5.3 (2013-10-11)
+1.5.3.1 (2013-10-12)
+- Improved	- Error notice if field group's channel(s) have no assigned category groups.
+- Bug fix 	- If field group was assigned to multiple channels, only one channel's assigned categories would display
 - Bug fix	- Fixed database issues under certain versions of MySQL
 - Bug fix	- Moved filter back to top of list
 
