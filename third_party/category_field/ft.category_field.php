@@ -14,7 +14,7 @@ class  Category_field_ft extends EE_Fieldtype {
 
 	public $info = array(
 			'name'		=>	'Category Field',
-			'version'	=>	'1.5.3.1'
+			'version'	=>	'1.5.3.2'
 			);
 
 	public $ft_name = "category_field";
@@ -229,6 +229,9 @@ class  Category_field_ft extends EE_Fieldtype {
 
 		$cat_group_ids =  implode (',' , $ids );
 
+		// Check again after parsing, bail if its empty		
+		if($cat_group_ids == '') return array();
+		
 		// Finally get the category groups' data!
 		$query = $this->EE->db->query("select group_id, group_name from exp_category_groups	where group_id IN($cat_group_ids)");
 		if($query->num_rows() == 0) return array();
