@@ -14,7 +14,7 @@ class  Category_field_ft extends EE_Fieldtype {
 
 	public $info = array(
 			'name'		=>	'Category Field',
-			'version'	=>	'1.5.3.2'
+			'version'	=>	'1.5.4'
 			);
 
 	public $ft_name = "category_field";
@@ -216,11 +216,11 @@ class  Category_field_ft extends EE_Fieldtype {
 		$channel_ids =  implode (',' , $ids );
 
 		// Get Category Group IDs assigned to this field's parent channels
-		$query = $this->EE->db->query("select cat_group from exp_channels where channel_id IN ($channel_ids)");
+		$query = $this->EE->db->query("select cat_group from exp_channels where channel_id IN ($channel_ids) AND cat_group <> ''");
 		if($query->num_rows() == 0) return array();
 
 		// Convert results to comma delimited list so we can reuse in next query
-		$ids=array();
+		$ids = array();
 
 		foreach($query->result_array() as $row)
 		{
@@ -229,9 +229,9 @@ class  Category_field_ft extends EE_Fieldtype {
 
 		$cat_group_ids =  implode (',' , $ids );
 
-		// Check again after parsing, bail if its empty		
+		// Check again after parsing, bail if its empty
 		if($cat_group_ids == '') return array();
-		
+
 		// Finally get the category groups' data!
 		$query = $this->EE->db->query("select group_id, group_name from exp_category_groups	where group_id IN($cat_group_ids)");
 		if($query->num_rows() == 0) return array();
@@ -290,7 +290,7 @@ class  Category_field_ft extends EE_Fieldtype {
 		return $this->settings['category_field_category_group_id'];
 	}
 
-	// ----
+	// --------------------------------------------------------------------
 
 	function pre_process($data)
 	{

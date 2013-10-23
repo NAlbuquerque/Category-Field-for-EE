@@ -6,6 +6,10 @@ This field type allows you organize your category groups as you would any other 
 
 Release Notes
 --------
+1.5.3.3 (2013-10-22)
+- Bug fix - Fixed error when channel had no category groups assigned.
+
+
 1.5.3.2 (2013-10-14)
 
 - Improved	- (Introduced in 1.5) Error notice if field group's channel(s) have no assigned category groups.
