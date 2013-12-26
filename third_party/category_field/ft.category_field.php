@@ -14,7 +14,7 @@ class  Category_field_ft extends EE_Fieldtype {
 
 	public $info = array(
 			'name'		=>	'Category Field',
-			'version'	=>	'1.5.4'
+			'version'	=>	'1.5.5'
 			);
 
 	public $ft_name = "category_field";
@@ -69,10 +69,10 @@ class  Category_field_ft extends EE_Fieldtype {
 				});
 			</script>');
 
-		$html = form_hidden($this->field_name, '', 'id="'.$this->field_name.'" style=""');
+		$html = form_hidden($this->field_name);
 
 		if($hide_filter != 'y'){
-			$html .= '<input type="text" value="1" id="cat_filter_group_' . $group_id . '" class="filter_input" placeholder="'. lang('filter_input_placeholder'). '"/>';
+			$html .= '<input type="text" value="" id="cat_filter_group_' . $group_id . '" class="filter_input" placeholder="'. lang('filter_input_placeholder'). '"/>';
 		}
 
 		return $html;

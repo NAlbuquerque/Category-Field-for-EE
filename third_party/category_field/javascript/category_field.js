@@ -26,7 +26,7 @@
 		// ----------------------------------------------------------------
 
 		plugin.init = function() {
-
+			
 			// merge settings
 			plugin.settings = $.extend({}, defaults, options);
 
