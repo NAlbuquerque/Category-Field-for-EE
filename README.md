@@ -6,6 +6,9 @@ This field type allows you organize your category groups as you would any other 
 
 Release Notes
 --------
+1.5.5 (2013-12-26)
+- Bug fix - Fix bug where under certain conditions a publish form might fail to save.
+
 1.5.3.3 (2013-10-22)
 - Bug fix - Fixed error when channel had no category groups assigned.
 
