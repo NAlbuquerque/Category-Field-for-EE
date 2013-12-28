@@ -6,6 +6,10 @@ This field type allows you organize your category groups as you would any other 
 
 Release Notes
 --------
+
+1.5.6 (2013-12-28)
+- Bug fix - If channel had assigned category group which had been deleted, a sql error was thrown on channel fields screen
+
 1.5.5 (2013-12-26)
 - Bug fix - Fix bug where under certain conditions a publish form might fail to save.
 

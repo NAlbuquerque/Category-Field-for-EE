@@ -14,7 +14,7 @@ class  Category_field_ft extends EE_Fieldtype {
 
 	public $info = array(
 			'name'		=>	'Category Field',
-			'version'	=>	'1.5.5'
+			'version'	=>	'1.5.6'
 			);
 
 	public $ft_name = "category_field";
@@ -219,16 +219,22 @@ class  Category_field_ft extends EE_Fieldtype {
 		$query = $this->EE->db->query("select cat_group from exp_channels where channel_id IN ($channel_ids) AND cat_group <> ''");
 		if($query->num_rows() == 0) return array();
 
-		// Convert results to comma delimited list so we can reuse in next query
-		$ids = array();
+		// Since we may this fieldset assigned to multiple channels,
+		// we need to combine all of those channels' categories into
+		// a single list
 
+		$ids_str = '';
 		foreach($query->result_array() as $row)
 		{
-		    $ids[] = str_replace('|',',', $row['cat_group']);
+		    $ids_str .= $row['cat_group'];   
 		}
-
+		
+		// convert to array split by pipes
+		$ids =  preg_split('/[|]+/', $ids_str , -1, PREG_SPLIT_NO_EMPTY);
+		
+		// convert to comman del list for query
 		$cat_group_ids =  implode (',' , $ids );
-
+		
 		// Check again after parsing, bail if its empty
 		if($cat_group_ids == '') return array();
 
